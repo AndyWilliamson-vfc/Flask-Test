@@ -14,9 +14,13 @@ wsgi_app = app.wsgi_app
 
 
 @app.route('/')
-def hello():
-    """Renders a sample page."""
-    return render_template("/index.html")
+@app.route('/home')
+def home():
+    return render_template("/home.html")
+
+@app.route('/about')
+def about():
+    return render_template("/about.html")
 
 conn = pyodbc.connect('Driver={SQL Server};'
                       'Server=WDE01010;'
@@ -24,7 +28,7 @@ conn = pyodbc.connect('Driver={SQL Server};'
                       'Trusted_Connection=yes;')
 
 cursor = conn.cursor()
-cursor.execute('SELECT * FROM raw_INP15 where cono15="DC"')
+cursor.execute('SELECT * FROM raw_INP15 where cono15='+"'DC'")
 
 for row in cursor:
     print(row)
