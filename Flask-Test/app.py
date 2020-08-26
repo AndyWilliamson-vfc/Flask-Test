@@ -1,10 +1,5 @@
-"""
-This script runs the application using a development server.
-It contains the definition of routes and views for the application.
-"""
 
-from flask import Flask
-from flask import render_template 
+from flask import Flask, render_template, request
 import pyodbc
 
 app = Flask(__name__)
@@ -13,25 +8,36 @@ app = Flask(__name__)
 wsgi_app = app.wsgi_app
 
 
-@app.route('/')
-@app.route('/home')
-def home():
-    return render_template("/home.html")
-
-@app.route('/about')
-def about():
-    return render_template("/about.html")
+sqlfile='raw_SLP05'
 
 conn = pyodbc.connect('Driver={SQL Server};'
                       'Server=WDE01010;'
                       'Database=Dickies_BI_UK_Staging;'
                       'Trusted_Connection=yes;')
-
 cursor = conn.cursor()
-cursor.execute('SELECT * FROM raw_INP15 where cono15='+"'DC'")
+sql="SELECT * FROM Dickies_BI_UK_Staging.dbo.raw_INP15 "
+cursor.execute(sql)
+rows = cursor.fetchall()    
 
-for row in cursor:
-    print(row)
+@app.route('/')
+@app.route('/home')
+def home():
+    return render_template("/home.html", rows=rows)
+
+@app.route('/about')
+def about():
+    return render_template("/about.html", title='About')
+
+@app.route('/selection', methods=['POST', 'GET'])
+def selection(): 
+    if request.method == 'POST':
+        sqlfile = request.form.get('sqlfile')
+        return render_template("/home.html", rows=rows)
+
+    return '''<form method="POST">
+    File <input type="text" name="sqlfile">
+    <input type="submit">
+    </form>'''
 
 if __name__ == '__main__':
     import os

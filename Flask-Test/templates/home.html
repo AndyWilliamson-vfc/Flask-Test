@@ -1,9 +1,15 @@
 <html>
 <head>
-    <title>
-    </title>
+    {% if title %}
+    <title>Blog Entry - {{ title }}</title>
+    {% else %}
+    <title>Blog Entry</title>
+    {% endif %}
 </head>
 <body>
-    <h1>Dickies Workwear - Home</h1>
+
+    {% for row in rows: %}
+    <p><B> {{ row.prmt15 }} </B> / {{ row.psar15 }} / {{ row.prmd15 }}</p>
+    {% endfor %}
 </body>
 </html>

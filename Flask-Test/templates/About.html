@@ -1,9 +1,14 @@
 ﻿<html>
 <head>
-    <title>
-    </title>
+    {% if title %}
+    <title>Blog Entry - {{ title }}</title>
+    {% else %}
+    <title>Blog Entry</title>
+    {% endif %}
 </head>
 <body>
-    <h1>Dickies Workwear - About</h1>
+    <H1>About Page</H1>
 </body>
 </html>
+
+
